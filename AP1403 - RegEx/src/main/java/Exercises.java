@@ -9,7 +9,8 @@ public class Exercises {
         complete the method below, so it will validate an email address
      */
     public boolean validateEmail(String email) {
-        String regex = ""; // todo
+
+        String regex = "^(?!.*\\.\\@)[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]+$";
         Pattern pattern = Pattern.compile(regex);
         Matcher matcher = pattern.matcher(email);
 
@@ -22,7 +23,13 @@ public class Exercises {
         if there's no match for a date, return null
      */
     public String findDate(String string) {
-        // todo
+        String dateRegex = "\\b((0[1-9]|[12][0-9]|3[01])/(0[1-9]|1[0-2])/\\d{4}|\\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])|\\d{4}/(0[1-9]|1[0-2])/(0[1-9]|[12][0-9]|3[01]))\\b";
+        Pattern pattern = Pattern.compile(dateRegex);
+        Matcher matcher = pattern.matcher(string);
+
+        if (matcher.find()) {
+            return matcher.group();
+        }
         return null;
     }
 
@@ -37,8 +44,17 @@ public class Exercises {
         - has no white-space in it
      */
     public int findValidPasswords(String string) {
-        // todo
-        return -1;
+        Pattern pattern = Pattern.compile("(?=.*[A-Z])(?=.*[a-z])(?=.*\\d)(?=.*[!@#$%^&*]).{8,}");
+        String[] potentialPasswords = string.split("\\s");
+
+        int count = 0;
+        for (String password : potentialPasswords) {
+            Matcher matcher = pattern.matcher(password);
+            while (matcher.find()) {
+                count++;
+            }
+        }
+        return count;
     }
 
     /*
@@ -49,8 +65,33 @@ public class Exercises {
      */
     public List<String> findPalindromes(String string) {
         List<String> list = new ArrayList<>();
-        // todo
+
+        // this part splits the text into words by one or more spaces.
+        String[] tokens = string.split("\\s+");
+
+        for (String token : tokens) {
+            // this part removes any non-letter characters positioned at the beginning ot at the end of a word.
+            String cleaned = token.replaceAll("^[^a-zA-Z]+|[^a-zA-Z]+$", "");
+
+            if (cleaned.length() >= 3 && isPalindrome(cleaned)) {
+                list.add(cleaned);
+            }
+        }
         return list;
+    }
+
+    private boolean isPalindrome(String word) {
+        String lower = word.toLowerCase();
+        int left = 0;
+        int right = lower.length() - 1;
+        while (left < right) {
+            if (lower.charAt(left) != lower.charAt(right)) {
+                return false;
+            }
+            left++;
+            right--;
+        }
+        return true;
     }
 
     public static void main(String[] args) {
